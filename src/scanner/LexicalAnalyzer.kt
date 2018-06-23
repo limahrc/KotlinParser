@@ -1,11 +1,7 @@
-package scanner
-
-import Analyzer
-import Constants
 import java.io.File
 import java.io.IOException
 
-open class LexicalAnalyzer(inputFileName: String) : Analyzer(inputFileName) {
+open class LexicalAnalyzer internal constructor(inputFileName: String) : Analyzer(inputFileName) {
     protected var readedSymbol: Char = ' '
     var input: String
     private var position = 0
