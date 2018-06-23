@@ -10,7 +10,6 @@ class SyntacticAnalyzer(inputFileName: String) : Analyzer(inputFileName), Consta
         readToken()
     }
 
-
     fun readToken() {
         scanner.start()
     }
@@ -27,5 +26,7 @@ class SyntacticAnalyzer(inputFileName: String) : Analyzer(inputFileName), Consta
         }
     }
 
-    fun
+    fun isTokenIn(token: Constants.Token) {
+        return token == scanner.recognizedToken
+    }
 }
