@@ -1,7 +1,7 @@
 interface Constants {
 
     enum class Token {
-        DO, FOR, IF, WHILE, EQUAL, AP, FP, VAR, ACH, FCH, NUM,
+        DO, FOR, IF, IN, WHILE, EQUAL, AP, FP, VAR, ACH, FCH, NUM,
         OP_ARIT, OP_ARIT_SIGNAL, RELATIONAL_OP, LOGIC_BIN_OP, NOT, EOF
     }
 
@@ -9,7 +9,7 @@ interface Constants {
 
         const val DIGITS        = "0123456789"
         const val LETTERS       = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        const val NON_RESERVED_LETTERS       = "abceghjklmnopqrstuvxyz"
+        const val NON_RESERVED_LETTERS       = "abceghjklmnopqrstuvxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         const val SIGNALS       = "+-"
         const val ARITH_OPS     = "*/"
         const val RELATIONALS   = "><"
