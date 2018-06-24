@@ -8,8 +8,8 @@ class SyntaxError(private var foundToken: Constants.Token,
 {
 
     override fun toString(): String {
-        return "Syntax error: found token '$expectedTokens', " +
-                "expected $foundToken\n"
+        return "Syntax error: found token '$foundToken', " +
+                "expected $expectedTokens\n"
     }
 
 }

@@ -1,10 +1,10 @@
 import java.io.File
 import java.io.IOException
 
-open class LexicalAnalyzer internal constructor(inputFileName: String) : Analyzer(inputFileName) {
-    protected var readedSymbol: Char = ' '
+open class LexicalAnalyzer(inputFileName: String) {
+    var readedSymbol: Char = ' '
     var input: String
-    private var position = 0
+    var position = 0
     lateinit var recognizedToken: Constants.Token
 
     init {
@@ -28,5 +28,4 @@ open class LexicalAnalyzer internal constructor(inputFileName: String) : Analyze
     internal fun isSymbolIn(s: String): Boolean {
         return s.contains(readedSymbol)
     }
-
 }

@@ -1,18 +1,18 @@
-import scanner.KotlinLexicalAnalyzer
+import parser.KotlinSyntacticAnalyzer
+import parser.SyntaxError
 
 fun main(args: Array<String>) {
 
-    val scanner = KotlinLexicalAnalyzer(Constants.DEFAULT_INPUT_FILE_NAME)
+    try {
 
-    println("\nfound in file: ${scanner.input}\n\n" +
-            "Recognized tokens:")
+        val parser = KotlinSyntacticAnalyzer(Constants.DEFAULT_INPUT_FILE_NAME)
+        println("\nfound in file:\n${parser.scanner.input}")
+        parser.begin()
+        println("\nfile sucessfully analyzed")
 
-    do {
-
-        scanner.start()
-        if (scanner.recognizedToken != Constants.Token.EOF)
-            println(scanner.recognizedToken)
-
-    } while (!scanner.endOfFile())
-
+    } catch (e: LexicalError) {
+        print(e.toString())
+    } catch (e: SyntaxError) {
+        print(e.toString())
+    }
 }
