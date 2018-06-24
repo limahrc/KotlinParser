@@ -1,4 +1,5 @@
 package parser
+
 class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFileName) {
 
     fun begin() {
