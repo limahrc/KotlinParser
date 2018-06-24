@@ -1,3 +1,4 @@
+package scanner
 import Constants.Companion.ARITH_OPS
 import Constants.Companion.DIGITS
 import Constants.Companion.LETTERS

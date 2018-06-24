@@ -1,6 +1,6 @@
 package parser
 import Constants
-import KotlinLexicalAnalyzer
+import scanner.KotlinLexicalAnalyzer
 
 open class SyntacticAnalyzer(inputFileName: String) : Constants {
     var scanner = KotlinLexicalAnalyzer(inputFileName)
@@ -13,17 +13,18 @@ open class SyntacticAnalyzer(inputFileName: String) : Constants {
         scanner.start()
     }
 
-    fun recognize(token: Constants.Token) {
-
+    fun recognize(token: Constants.Token): Boolean {
         val expected = mutableListOf<Constants.Token>()
-
+        val isToken: Boolean
         if (scanner.recognizedToken == token) {
             println(scanner.recognizedToken)
             readToken()
+            isToken = true
         } else {
             expected.add(token)
             throw SyntaxError(scanner.recognizedToken, expected)
         }
+        return isToken
     }
 
     fun readedTokenIs(token: Constants.Token): Boolean {

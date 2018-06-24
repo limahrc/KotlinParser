@@ -12,14 +12,12 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
                 println(currentToken())
                 readToken()
                 cmdIF()
-                //command()
             }
             readedTokenIs(Constants.Token.FOR) -> {
                 println(currentToken())
                 readToken()
                 cmdFOR()
-                //command()
-            }
+                }
             readedTokenIs(Constants.Token.DO) -> {
                 println(currentToken())
                 readToken()
@@ -45,7 +43,9 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
 
     private fun cmdIF() {
         recognize(Constants.Token.AP)
+        exp()
         recognize(Constants.Token.FP)
+        block()
     }
 
     private fun cmdFOR() {
@@ -78,6 +78,63 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
     }
 
     private fun exp() {
-
+        println(currentToken())
+        when {
+            readedTokenIs(Constants.Token.AP) -> { // exp -> AP exp FP
+                readToken()
+                exp()
+                recognize(Constants.Token.FP)
+            }
+            readedTokenIs(Constants.Token.VAR) -> { // exp -> VAR expB
+                readToken()
+                expB()
+            }
+            readedTokenIs(Constants.Token.NOT) -> { // exp -> NOT expB
+                readToken()
+                exp()
+            }
+            readedTokenIs(Constants.Token.OP_ARIT_SIGNAL) || readedTokenIs(Constants.Token.NUM) -> {
+                number()
+                expB()
+            }
+        }
     }
+
+    private fun expB() {
+        val notAllowed = listOf(Constants.Token.FP, Constants.Token.FCH)
+        if (!notAllowed.contains(currentToken())) {
+            operator()
+            exp()
+        } else {
+            lambda()
+        }
+    }
+
+    private fun number() {
+        if (readedTokenIs(Constants.Token.OP_ARIT_SIGNAL)) {
+            readToken()
+        }
+        recognize(Constants.Token.NUM)
+    }
+
+    private fun operator() {
+        val ops = listOf (
+                Constants.Token.OP_ARIT,
+                Constants.Token.OP_ARIT_SIGNAL,
+                Constants.Token.LOGIC_BIN_OP,
+                Constants.Token.RELATIONAL_OP
+        )
+        if (!ops.contains(currentToken())) {
+            val expected = mutableListOf<Constants.Token>()
+            expected.addAll(ops)
+            throw SyntaxError(currentToken(), expected)
+        } else {
+            println(currentToken())
+            readToken()
+        }
+    }
+}
+
+private fun lambda() {
+    //does nothing.
 }

@@ -1,5 +1,6 @@
 import parser.KotlinSyntacticAnalyzer
 import parser.SyntaxError
+import scanner.LexicalError
 
 fun main(args: Array<String>) {
 
