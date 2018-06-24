@@ -1,4 +1,3 @@
-package scanner
 import Constants.Companion.ARITH_OPS
 import Constants.Companion.DIGITS
 import Constants.Companion.LETTERS
@@ -118,17 +117,14 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
 
     private fun s1() {
         setTokenAs(Constants.Token.VAR)
-        when (readedSymbol) {
-            'f' -> {
-                readSymbol()
-                s2()
-            }
-            'n' -> {
-                readSymbol()
-                s2_1()
-            }
-            else -> s3()
+        if (readedSymbol == 'f') {
+            readSymbol()
+            s2()
+        } else if(readedSymbol == 'n'){
+            readSymbol()
+            s2_1()
         }
+        else s3()
     }
 
     private fun s2() {
@@ -182,16 +178,14 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
 
     private fun s8() {
         setTokenAs(Constants.Token.NUM)
-        when {
-            isSymbolIn(DIGITS) -> {
-                readSymbol()
-                s8()
-            }
-            readedSymbol == '.' -> {
-                readSymbol()
-                s8_1()
-            }
-            isSymbolIn(LETTERS) -> throw LexicalError(readedSymbol, DIGITS+'.')
+        if (isSymbolIn(DIGITS)) {
+            readSymbol()
+            s8()
+        }else if (readedSymbol == '.'){
+            readSymbol()
+            s8_1()
+        }else if (isSymbolIn(LETTERS)){
+            throw LexicalError(readedSymbol, DIGITS+'.')
         }
     }
 
@@ -201,7 +195,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
             readSymbol()
             s8_2()
         }else if (!isSymbolIn(DIGITS)){
-            throw LexicalError(readedSymbol, DIGITS)
+                throw LexicalError(readedSymbol, DIGITS)
         }
     }
 
@@ -240,7 +234,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         if (readedSymbol == 'o') {
             readSymbol()
             s13()
-        }
+        }else s3()
     }
 
     private fun s13() {
@@ -255,7 +249,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         if (readedSymbol == 'h') {
             readSymbol()
             s15()
-        }
+        }else s3()
     }
 
     private fun s15() {
@@ -263,7 +257,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         if (readedSymbol == 'i') {
             readSymbol()
             s16()
-        }
+        }else s3()
     }
 
     private fun s16() {
@@ -271,14 +265,14 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         if (readedSymbol == 'l') {
             readSymbol()
             s17()
-        }
+        }else s3()
     }
     private fun s17() {
         setTokenAs(Constants.Token.VAR)
         if (readedSymbol == 'e') {
             readSymbol()
             s18()
-        }
+        }else s3()
     }
 
     private fun s18() {
@@ -312,6 +306,10 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
 
     private fun s22() {
         setTokenAs(Constants.Token.LOGIC_BIN_OP)
+    }
+
+    fun endOfFile(): Boolean {
+        return recognizedToken == Constants.Token.EOF
     }
 
     private fun setTokenAs(token: Constants.Token) {
