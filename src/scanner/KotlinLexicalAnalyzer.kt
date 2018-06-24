@@ -120,7 +120,11 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         if (readedSymbol == 'f') {
             readSymbol()
             s2()
-        } else s3()
+        } else if(readedSymbol == 'n'){
+            readSymbol()
+            s2_1()
+        }
+        else s3()
     }
 
     private fun s2() {
@@ -128,6 +132,13 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
             readSymbol()
             s3()
         }else setTokenAs(Constants.Token.IF)
+    }
+
+    private fun s2_1(){
+        if (isSymbolIn(LETTERS+DIGITS)){
+            readSymbol()
+            s3()
+        }else setTokenAs(Constants.Token.IN)
     }
 
     private fun s3() {
@@ -173,7 +184,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         }else if (readedSymbol == '.'){
             readSymbol()
             s8_1()
-        }else if (!isSymbolIn(DIGITS+'.')){
+        }else if (isSymbolIn(LETTERS)){
             throw LexicalError(readedSymbol, DIGITS+'.')
         }
     }
