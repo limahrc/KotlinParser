@@ -43,10 +43,10 @@ public class Main extends Application implements EventHandler<ActionEvent>
     @Override
     public void start(Stage primaryStage)
     {
-        primaryStage.setTitle("File Reader");
+        primaryStage.setTitle("Grupo 4 - LFA");
         primaryStage.setResizable(false);
 
-        buttonSelectFile = new Button("Select Input Text File");
+        buttonSelectFile = new Button("Escolha o arquivo");
         buttonSelectFile.setOnAction(this);
 
 
@@ -89,7 +89,7 @@ public class Main extends Application implements EventHandler<ActionEvent>
     private void openFile()
     {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Text File");
+        fileChooser.setTitle("Escolha um arquivo txt");
         fileChooser.setInitialDirectory(new File("."));
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt", "*.csv"));
         File selectedFile = fileChooser.showOpenDialog(null);
