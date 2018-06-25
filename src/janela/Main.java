@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
-
+import parser.*;
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
@@ -112,33 +112,35 @@ public class Main extends Application implements EventHandler<ActionEvent>
         fileChooser.setInitialDirectory(new File("."));
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt", "*.csv"));
         File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile == null)
-        {
-            String fileName = "Fox.txt";
-            try
-            {
-                reader = new BufferedReader(new FileReader("data/"+fileName));
-            }
-            catch (IOException e)
-            { return false;
-            }
-            labelFileName.setText(fileName);
-            buttonReadLine.setDisable(false);
-        }
-
-        else
-        {
-            try
-            {
-                reader = new BufferedReader(new FileReader(selectedFile));
-                buttonReadLine.setDisable(false);
-            }
-            catch (IOException e)
-            { showErrorDialog("IO Exception: " + e.getMessage());
-                return false;
-            }
-            labelFileName.setText(selectedFile.getName());
-        }
+        KotlinSyntacticAnalyzer parser = new KotlinSyntacticAnalyzer (selectedFile);
+        parser.begin();
+//        if (selectedFile == null)
+//        {
+//            String fileName = "Fox.txt";
+//            try
+//            {
+//                reader = new BufferedReader(new FileReader("data/"+fileName));
+//            }
+//            catch (IOException e)
+//            { return false;
+//            }
+//            labelFileName.setText(fileName);
+//            buttonReadLine.setDisable(false);
+//        }
+//
+//        else
+//        {
+//            try
+//            {
+//                reader = new BufferedReader(new FileReader(selectedFile));
+//                buttonReadLine.setDisable(false);
+//            }
+//            catch (IOException e)
+//            { showErrorDialog("IO Exception: " + e.getMessage());
+//                return false;
+//            }
+//            labelFileName.setText(selectedFile.getName());
+//        }
 
 
         textLineFields.setText("");
@@ -193,8 +195,7 @@ public class Main extends Application implements EventHandler<ActionEvent>
     public void handle(ActionEvent event)
     {
         Object source = event.getSource();
-
-        if (source == buttonSelectFile) openFile();
+        if (source == buttonSelectFile) ;
         else if (source == buttonReadLine) displayNextRecord();
     }
 
