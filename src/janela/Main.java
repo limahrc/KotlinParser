@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
-import parser.*;
+import parser;
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
