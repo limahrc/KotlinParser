@@ -86,7 +86,7 @@ public class Main extends Application implements EventHandler<ActionEvent>
 
 
 
-    private String openFile()
+    private void openFile()
     {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Text File");
@@ -94,7 +94,7 @@ public class Main extends Application implements EventHandler<ActionEvent>
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt", "*.csv"));
         File selectedFile = fileChooser.showOpenDialog(null);
         buttonEnviar.setDisable(false);
-        return selectedFile.getName();
+        nameFile = selectedFile.getName();
     }
 
 
