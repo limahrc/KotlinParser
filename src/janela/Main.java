@@ -19,6 +19,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import parser.KotlinSyntacticAnalyzer;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 
 public class Main extends Application implements EventHandler<ActionEvent>
 {
@@ -94,12 +95,14 @@ public class Main extends Application implements EventHandler<ActionEvent>
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt", "*.csv"));
         File selectedFile = fileChooser.showOpenDialog(null);
         buttonEnviar.setDisable(false);
-        nameFile = selectedFile.getName();
+        nameFile = selectedFile.getAbsolutePath();
     }
 
 
-    private void sendFile(String nomeArquivo){
-        KotlinSyntacticAnalyzer parser = new KotlinSyntacticAnalyzer (nomeArquivo);
+    private void sendFile(String nameFile){
+
+        System.out.println(nameFile);
+        KotlinSyntacticAnalyzer parser = new KotlinSyntacticAnalyzer (nameFile);
         parser.begin();
     }
 
