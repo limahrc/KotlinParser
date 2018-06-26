@@ -11,26 +11,26 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
         when {
             readedTokenIs(Constants.Token.IF) -> {
                 println(currentToken())
-                readToken()
+                readNextToken()
                 cmdIF()
             }
             readedTokenIs(Constants.Token.FOR) -> {
                 println(currentToken())
-                readToken()
+                readNextToken()
                 cmdFOR()
                 }
             readedTokenIs(Constants.Token.DO) -> {
                 println(currentToken())
-                readToken()
+                readNextToken()
                 cmdDoWhile()
             }
             readedTokenIs(Constants.Token.WHILE) -> {
                 println(currentToken())
-                readToken()
+                readNextToken()
                 cmdWhile()
             }
             readedTokenIs(Constants.Token.VAR) -> {
-                readToken()
+                readNextToken()
                 assignment()
             }
         }
@@ -82,16 +82,16 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
         println(currentToken())
         when {
             readedTokenIs(Constants.Token.AP) -> { // exp -> AP exp FP
-                readToken()
+                readNextToken()
                 exp()
                 recognize(Constants.Token.FP)
             }
             readedTokenIs(Constants.Token.VAR) -> { // exp -> VAR expB
-                readToken()
+                readNextToken()
                 expB()
             }
             readedTokenIs(Constants.Token.NOT) -> { // exp -> NOT expB
-                readToken()
+                readNextToken()
                 exp()
             }
             readedTokenIs(Constants.Token.OP_ARIT_SIGNAL) || readedTokenIs(Constants.Token.NUM) -> {
@@ -102,7 +102,11 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
     }
 
     private fun expB() {
-        val notAllowed = listOf(Constants.Token.FP, Constants.Token.FCH)
+        val notAllowed = listOf(
+                Constants.Token.FP,
+                Constants.Token.FCH,
+                Constants.Token.EOF
+        )
         if (!notAllowed.contains(currentToken())) {
             operator()
             exp()
@@ -113,7 +117,7 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
 
     private fun number() {
         if (readedTokenIs(Constants.Token.OP_ARIT_SIGNAL)) {
-            readToken()
+            readNextToken()
         }
         recognize(Constants.Token.NUM)
     }
@@ -128,10 +132,10 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
         if (!ops.contains(currentToken())) {
             val expected = mutableListOf<Constants.Token>()
             expected.addAll(ops)
-            throw SyntaxError(currentToken(), expected)
+            throw SyntaxError(this, expected)
         } else {
             println(currentToken())
-            readToken()
+            readNextToken()
         }
     }
 }

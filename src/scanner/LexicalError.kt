@@ -1,6 +1,8 @@
 package scanner
-class LexicalError(var foundSymbol: Char, var expectedSymbol: String) : RuntimeException() {
+
+class LexicalError(var scanner: LexicalAnalyzer , var expectedSymbol: String) : RuntimeException() {
     override fun toString(): String {
-        return "Lexical error: found '$foundSymbol', expected '$expectedSymbol'"
+        return "Lexical error in line ${scanner.line}, collum ${scanner.collumn}: " +
+                "found '${scanner.readedSymbol}', expected '$expectedSymbol'"
     }
 }

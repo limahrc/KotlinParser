@@ -6,6 +6,8 @@ import java.io.IOException
 open class LexicalAnalyzer(inputFileName: String) {
     var readedSymbol: Char = ' '
     var input: String
+    var line = 1
+    var collumn = 1
     var position = 0
     lateinit var recognizedToken: Constants.Token
 
@@ -15,19 +17,23 @@ open class LexicalAnalyzer(inputFileName: String) {
             readSymbol()
         } catch (e: IOException) {
             throw RuntimeException("Error while reading file " +
-                    Constants.DEFAULT_INPUT_FILE_NAME)
+                    inputFileName)
         }
     }
 
     fun readSymbol() {
-        readedSymbol = try {
-            input[position++]
+        try {
+            readedSymbol = input[position++]
+            if (readedSymbol == '\n')
+                line++
+            if (!isSymbolIn(Constants.SEPARATORS))
+                collumn++
         } catch (e: IndexOutOfBoundsException) {
-            Constants.EOF
+            readedSymbol = Constants.EOF
         }
     }
 
-    internal fun isSymbolIn(s: String): Boolean {
+    fun isSymbolIn(s: String): Boolean {
         return s.contains(readedSymbol)
     }
 }

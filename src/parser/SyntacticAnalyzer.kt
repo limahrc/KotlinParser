@@ -3,13 +3,14 @@ import Constants
 import scanner.KotlinLexicalAnalyzer
 
 open class SyntacticAnalyzer(inputFileName: String) : Constants {
+
     var scanner = KotlinLexicalAnalyzer(inputFileName)
 
     init {
-        readToken()
+        readNextToken()
     }
 
-    fun readToken() {
+    fun readNextToken() {
         scanner.start()
     }
 
@@ -18,11 +19,11 @@ open class SyntacticAnalyzer(inputFileName: String) : Constants {
         val isToken: Boolean
         if (scanner.recognizedToken == token) {
             println(scanner.recognizedToken)
-            readToken()
+            readNextToken()
             isToken = true
         } else {
             expected.add(token)
-            throw SyntaxError(scanner.recognizedToken, expected)
+            throw SyntaxError(this, expected)
         }
         return isToken
     }
@@ -34,4 +35,9 @@ open class SyntacticAnalyzer(inputFileName: String) : Constants {
     fun currentToken(): Constants.Token {
         return scanner.recognizedToken
     }
+
+    fun currentSymbol(): Char {
+        return scanner.readedSymbol
+    }
+
 }

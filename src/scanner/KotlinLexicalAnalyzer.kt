@@ -9,6 +9,8 @@ import Constants.Companion.SIGNALS
 
 class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileName) {
 
+    //lateinit var lexem: StringBuilder
+
     fun start() {
         when {
 
@@ -18,6 +20,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
             }
 
             readedSymbol == 'd' -> {
+                //lexem.append(readedSymbol)
                 readSymbol()
                 s12()
             }
@@ -112,7 +115,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
                 s4()
             }
 
-            else -> LexicalError(readedSymbol, DIGITS
+            else -> throw LexicalError(this, DIGITS
                     + LETTERS + SIGNALS + ARITH_OPS + RELATIONALS)
         }
     }
@@ -192,7 +195,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
                 readSymbol()
                 s8_1()
             }
-            isSymbolIn(LETTERS) -> throw LexicalError(readedSymbol, "$DIGITS.")
+            isSymbolIn(LETTERS) -> throw LexicalError(this, "$DIGITS.")
         }
     }
 
@@ -202,7 +205,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
             readSymbol()
             s8_2()
         } else if (!isSymbolIn(DIGITS)){
-            throw LexicalError(readedSymbol, DIGITS)
+            throw LexicalError(this, DIGITS)
         }
     }
 
@@ -212,7 +215,7 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
             readSymbol()
             s8_2()
         } else if(isSymbolIn(LETTERS)){
-            throw LexicalError(readedSymbol, DIGITS)
+            throw LexicalError(this, DIGITS)
         }
     }
 
@@ -301,14 +304,14 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         if(readedSymbol == '&') {
             readSymbol()
             s22()
-        } else throw LexicalError(readedSymbol, "&")
+        } else throw LexicalError(this, "&")
     }
 
     private fun s21() {
         if(readedSymbol == '|') {
             readSymbol()
             s22()
-        } else throw LexicalError(readedSymbol, "|")
+        } else throw LexicalError(this, "|")
     }
 
     private fun s22() {
