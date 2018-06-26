@@ -6,10 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -29,7 +26,8 @@ public class Main extends Application implements EventHandler<ActionEvent>
     private Button buttonSelectFile;
     private Button buttonEnviar;
     private Label labelFileName;
-    private Text textLineFields;
+    private Label labelResult;
+    private Text textResult;
     private ChoiceBox choiceBoxDelimiter;
     private String nameFile;
     private static final int WINDOW_WIDTH  = 500;
@@ -56,15 +54,14 @@ public class Main extends Application implements EventHandler<ActionEvent>
         buttonEnviar.setDisable(true); //User cannot read line until a file has been opened.
 
         labelFileName = new Label();
-        textLineFields = new Text();
 
-
-
+        labelResult = new Label();
+        textResult = new Text();
         //Make both buttons the same width.
         buttonSelectFile.setMaxWidth(WINDOW_WIDTH/2);
         labelFileName.setMaxWidth(WINDOW_WIDTH/2);
         buttonEnviar.setMaxWidth(WINDOW_WIDTH/2);
-        textLineFields.setWrappingWidth(WINDOW_WIDTH-20);
+        textResult.setWrappingWidth(WINDOW_WIDTH-20);
 
         VBox buttonBox = new VBox();
         buttonBox.setPadding(new Insets(10, 10, 10, 10));  //Sets the space around the buttonBox.
@@ -74,7 +71,7 @@ public class Main extends Application implements EventHandler<ActionEvent>
                 buttonSelectFile,
                 labelFileName,
                 buttonEnviar,
-                textLineFields
+                textResult
         );
 
         StackPane root = new StackPane();
