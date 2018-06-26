@@ -393,6 +393,10 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         setTokenAs(Constants.TokenDescript.LOGIC_BIN_OP)
     }
 
+    /**
+     * Define o token passado por parametro, como token reconhecido.
+     * @author Victor Cezari
+     */
     private fun setTokenAs(descript: Constants.TokenDescript) {
         token.descript = descript
     }

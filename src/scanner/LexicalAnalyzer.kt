@@ -10,6 +10,12 @@ open class LexicalAnalyzer(inputFileName: String) {
     var collumn = 1
     var position = 0
 
+    /**
+     * Inicialização do construtor da classe.
+     * Abre o arquivo armazenando seu conteúdo na string 'input'.
+     * @obs Lança exceção caso falhe em ler o arquivo
+     * @author Herick Lima
+     */
     init {
         try {
             input = File(inputFileName).readText()
@@ -19,6 +25,10 @@ open class LexicalAnalyzer(inputFileName: String) {
         }
     }
 
+    /**
+     * Efetua a leitura dos caracteres do arquivo.
+     * @author Victor Cezari
+     */
     fun readSymbol() {
         try {
             readedSymbol = input[position++]
@@ -31,6 +41,10 @@ open class LexicalAnalyzer(inputFileName: String) {
         }
     }
 
+    /**
+     * Verifica se o simbolo lido está contido no conjunto de simbolos passados via parametro
+     * @author Victor Cezari
+     */
     fun isSymbolIn(s: String): Boolean {
         return s.contains(readedSymbol)
     }

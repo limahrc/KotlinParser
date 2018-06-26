@@ -27,10 +27,20 @@ open class SyntacticAnalyzer(inputFileName: String) : Constants {
         hash[Constants.TokenDescript.NOT] = "!"
     }
 
+    /**
+     * Dispara a Máquina de Moore e identifica um token no arquivo
+     * @author Herick Lima
+     */
     fun readNextToken() {
         scanner.start()
     }
 
+    /**
+     * Faz a verificação do token atual com o esperado.
+     * Avança o ponteiro de leitura se verdadeiro,
+     * Lança excessão deerro sintático se falso
+     * @author Herick Lima
+     */
     fun recognize(descript: Constants.TokenDescript): Boolean {
         val expected = mutableListOf<Constants.TokenDescript>()
         val isToken: Boolean
@@ -45,16 +55,20 @@ open class SyntacticAnalyzer(inputFileName: String) : Constants {
         return isToken
     }
 
+    /**
+     * Verifica se o token lido está contido no conjunto de simbolos
+     * @author Victor Cezari
+     */
     fun readedTokenIs(tokenDescript: Constants.TokenDescript): Boolean {
         return tokenDescript == scanner.token.descript
     }
 
+    /**
+     * Retorna o token mais recente lido
+     * @author Victor Cezari
+     */
     fun currentToken(): Constants.TokenDescript {
         return scanner.token.descript
-    }
-
-    fun currentSymbol(): Char {
-        return scanner.readedSymbol
     }
 
 }

@@ -41,6 +41,7 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
                 cmdWhile()
             }
             readedTokenIs(Constants.TokenDescript.VAR) -> {
+                println(currentToken())
                 readNextToken()
                 assignment()
             }
@@ -210,7 +211,7 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
                 Constants.TokenDescript.LOGIC_BIN_OP,
                 Constants.TokenDescript.RELATIONAL_OP
         )
-        if (!ops.contains(currentToken()) || scanner.readedSymbol == '\n') {
+        if (!ops.contains(currentToken())) {
             lambda()
         } else {
             operator()
@@ -221,6 +222,10 @@ class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFi
     }
 }
 
+/**
+ * Função que não faz nada
+ * @author desconhecido
+ */
 private fun lambda() {
-    //does nothing.
+
 }

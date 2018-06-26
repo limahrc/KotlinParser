@@ -17,6 +17,6 @@ interface Constants {
         const val LOGICS        = "&&||"
         const val SEPARATORS    = " \r\n\t"
         const val EOF: Char     = 0.toChar()
-        const val DEFAULT_INPUT_FILE_NAME    = "C:\\Users\\limah\\IdeaProjects\\KotlinParser\\src\\input.txt"
+        const val DEFAULT_INPUT_FILE_NAME    = "C:\\Users\\limah\\Downloads\\inputSint.txt"
     }
 }
