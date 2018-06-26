@@ -14,6 +14,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 import parser.KotlinSyntacticAnalyzer;
+import parser.SyntaxError;
+import scanner.LexicalError;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -97,10 +100,17 @@ public class Main extends Application implements EventHandler<ActionEvent>
 
 
     private void sendFile(String nameFile){
+        try{
+            System.out.println(nameFile);
+            KotlinSyntacticAnalyzer parser = new KotlinSyntacticAnalyzer (nameFile);
+            parser.begin();
+            textResult.setText("Sucesso!");
+        } catch (LexicalError error){
+            textResult.setText(error.toString());
+        } catch (SyntaxError error){
+            textResult.setText(error.toString());
+        }
 
-        System.out.println(nameFile);
-        KotlinSyntacticAnalyzer parser = new KotlinSyntacticAnalyzer (nameFile);
-        parser.begin();
     }
 
 
