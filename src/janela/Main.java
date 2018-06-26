@@ -67,7 +67,7 @@ public class Main extends Application implements EventHandler<ActionEvent>
         textResult.setWrappingWidth(WINDOW_WIDTH-20);
 
         VBox buttonBox = new VBox();
-        buttonBox.setPadding(new Insets(10, 10, 10, 10));  //Sets the space around the buttonBox.
+        buttonBox.setPadding(new Insets(10, 10, 10, 250));  //Sets the space around the buttonBox.
         buttonBox.setSpacing(10);  //Sets the vertical space in pixels between buttons within the box.
 
         buttonBox.getChildren().addAll(
