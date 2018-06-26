@@ -5,10 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -16,6 +13,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 import parser.KotlinSyntacticAnalyzer;
+import parser.SyntaxError;
+import scanner.LexicalError;
+
 import java.io.BufferedReader;
 import java.io.File;
 
@@ -26,53 +26,44 @@ public class Main extends Application implements EventHandler<ActionEvent>
 
     private Button buttonSelectFile;
     private Button buttonEnviar;
-    private Label labelFileName;
-    private Text textLineFields;
+    private Text textResult;
     private ChoiceBox choiceBoxDelimiter;
     private String nameFile;
-    private static final int WINDOW_WIDTH  = 500;
-    private static final int WINDOW_HEIGHT = 300;
+    private static final int WINDOW_WIDTH  = 300;
+    private static final int WINDOW_HEIGHT = 200;
 
-
-    //============================================================================================
-    // This method is called once by JavaFX.launch()
-    // This method sets the window (Stage primaryStage) title.
-    // It also creates and the GUI components.
-    //============================================================================================
     @Override
     public void start(Stage primaryStage)
     {
-        primaryStage.setTitle("Kotlin Parser");
+        primaryStage.setTitle("Grupo 4 - LFA: Kotlin Parser");
         primaryStage.setResizable(false);
 
         buttonSelectFile = new Button("Escolha o arquivo");
         buttonSelectFile.setOnAction(this);
 
-
         buttonEnviar = new Button("Analisar");
         buttonEnviar.setOnAction(this);
         buttonEnviar.setDisable(true); //User cannot read line until a file has been opened.
 
-        labelFileName = new Label();
-        textLineFields = new Text();
+        Label labelFileName = new Label();
 
-
-
+        Label labelResult = new Label();
+        textResult = new Text();
         //Make both buttons the same width.
         buttonSelectFile.setMaxWidth(WINDOW_WIDTH/2);
         labelFileName.setMaxWidth(WINDOW_WIDTH/2);
         buttonEnviar.setMaxWidth(WINDOW_WIDTH/2);
-        textLineFields.setWrappingWidth(WINDOW_WIDTH-20);
+        textResult.setWrappingWidth(WINDOW_WIDTH-20);
 
         VBox buttonBox = new VBox();
-        buttonBox.setPadding(new Insets(10, 10, 10, 10));  //Sets the space around the buttonBox.
+        buttonBox.setPadding(new Insets(10, 10, 10, 40));  //Sets the space around the buttonBox.
         buttonBox.setSpacing(10);  //Sets the vertical space in pixels between buttons within the box.
 
         buttonBox.getChildren().addAll(
                 buttonSelectFile,
                 labelFileName,
                 buttonEnviar,
-                textLineFields
+                textResult
         );
 
         StackPane root = new StackPane();
@@ -80,10 +71,6 @@ public class Main extends Application implements EventHandler<ActionEvent>
         primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         primaryStage.show();
     }
-
-
-
-
 
     private void openFile()
     {
@@ -98,19 +85,19 @@ public class Main extends Application implements EventHandler<ActionEvent>
 
 
     private void sendFile(String nameFile){
+        try{
+            System.out.println(nameFile);
+            KotlinSyntacticAnalyzer parser = new KotlinSyntacticAnalyzer (nameFile);
+            parser.begin();
+            textResult.setText("Análise concluída. Nenhum erro detectado.");
+        } catch (LexicalError error){
+            textResult.setText(error.toString());
+        } catch (SyntaxError error){
+            textResult.setText(error.toString());
+        }
 
-        System.out.println(nameFile);
-        KotlinSyntacticAnalyzer parser = new KotlinSyntacticAnalyzer (nameFile);
-        parser.begin();
     }
 
-
-
-
-
-    //============================================================================================
-    // Called by JavaFX when the user clicks a button.
-    //============================================================================================
     @Override
     public void handle(ActionEvent event)
     {
@@ -120,13 +107,6 @@ public class Main extends Application implements EventHandler<ActionEvent>
 
     }
 
-
-
-
-    //============================================================================================
-    // Display a JavaFX Error Dialog.
-    // This method will not return until the user clicks "ok" in the displayed dialog.
-    //============================================================================================
     private void showErrorDialog(String msg)
     {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -135,14 +115,7 @@ public class Main extends Application implements EventHandler<ActionEvent>
         alert.showAndWait();
     }
 
-
-
-    //============================================================================================
-    // Program Entry point use to Launch JavaFX.
-    // In this program, the command line arguments (args) are ignored.
-    //============================================================================================
-    public static void main(String[ ] args)
-    {
+    public static void main(String[ ] args) {
         launch(args);
     }
 

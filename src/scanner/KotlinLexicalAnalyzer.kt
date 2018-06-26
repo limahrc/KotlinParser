@@ -9,9 +9,10 @@ import Constants.Companion.SIGNALS
 
 class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileName) {
 
-    //lateinit var lexem: StringBuilder
+    val token = Token(StringBuilder(), Constants.TokenDescript.EOF)
 
     fun start() {
+        token.lexem.setLength(0)
         when {
 
             isSymbolIn(SEPARATORS) -> {
@@ -20,97 +21,116 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
             }
 
             readedSymbol == 'd' -> {
-                //lexem.append(readedSymbol)
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s12()
             }
 
             readedSymbol == 'f' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s5()
             }
 
             readedSymbol == 'i' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s1()
             }
 
             readedSymbol == 'w' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s14()
             }
 
             readedSymbol == '{' -> {
+
+                token.lexem.append(readedSymbol)
                 readSymbol()
-                setTokenAs(Constants.Token.ACH)
+                setTokenAs(Constants.TokenDescript.ACH)
             }
 
             readedSymbol == '}' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
-                setTokenAs(Constants.Token.FCH)
+                setTokenAs(Constants.TokenDescript.FCH)
             }
 
             readedSymbol == '(' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
-                setTokenAs(Constants.Token.AP)
+                setTokenAs(Constants.TokenDescript.AP)
             }
 
             readedSymbol == ')' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
-                setTokenAs(Constants.Token.FP)
+                setTokenAs(Constants.TokenDescript.FP)
             }
 
             readedSymbol == '=' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s11()
             }
 
             readedSymbol == '!' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s19()
             }
 
             readedSymbol == '&' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s20()
             }
 
             readedSymbol == '|' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s21()
             }
 
             isSymbolIn(RELATIONALS) -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s9()
             }
 
             isSymbolIn(SIGNALS) -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
-                setTokenAs(Constants.Token.OP_ARIT_SIGNAL)
+                setTokenAs(Constants.TokenDescript.OP_ARIT_SIGNAL)
             }
 
             isSymbolIn(ARITH_OPS) -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
-                setTokenAs(Constants.Token.OP_ARIT)
+                setTokenAs(Constants.TokenDescript.OP_ARIT)
             }
 
             isSymbolIn(Constants.NON_RESERVED_LETTERS) -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s3()
             }
 
             isSymbolIn(DIGITS) -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s8()
             }
 
             readedSymbol == '.' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s8()
             }
 
             readedSymbol == Constants.EOF -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s4()
             }
@@ -121,17 +141,21 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
     }
 
     private fun s1() {
-        setTokenAs(Constants.Token.VAR)
         when (readedSymbol) {
             'f' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s2()
             }
             'n' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s2_1()
             }
-            else -> s3()
+            else -> {
+                setTokenAs(Constants.TokenDescript.VAR)
+                s3()
+            }
         }
     }
 
@@ -139,59 +163,77 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
         if (isSymbolIn(LETTERS+DIGITS)) {
             readSymbol()
             s3()
-        } else setTokenAs(Constants.Token.IF)
+        } else {
+            setTokenAs(Constants.TokenDescript.IF)
+        }
     }
 
     private fun s2_1(){
         if (isSymbolIn(LETTERS+DIGITS)){
             readSymbol()
             s3()
-        } else setTokenAs(Constants.Token.IN)
+        } else {
+            setTokenAs(Constants.TokenDescript.IN)
+        }
     }
 
     private fun s3() {
-        setTokenAs(Constants.Token.VAR)
         if (isSymbolIn(LETTERS+DIGITS)) {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s3()
+        }else{
+            setTokenAs(Constants.TokenDescript.VAR)
         }
     }
 
     private fun s4() {
-        setTokenAs(Constants.Token.EOF)
+        setTokenAs(Constants.TokenDescript.EOF)
     }
 
     private fun s5() {
-        setTokenAs(Constants.Token.VAR)
         if (readedSymbol == 'o') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s6()
-        } else s3()
+        } else {
+            setTokenAs(Constants.TokenDescript.VAR)
+            s3()
+        }
     }
 
     private fun s6() {
         if (readedSymbol == 'r') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s7()
-        } else s3()
+        } else {
+            setTokenAs(Constants.TokenDescript.VAR)
+            s3()
+        }
     }
 
 
     private fun s7() {
-        if (isSymbolIn(LETTERS+DIGITS)) {
+        if (isSymbolIn(LETTERS + DIGITS)) {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s3()
-        } else setTokenAs(Constants.Token.FOR)
+        } else{
+            setTokenAs(Constants.TokenDescript.FOR)
+        }
     }
 
     private fun s8() {
-        setTokenAs(Constants.Token.NUM)
+        setTokenAs(Constants.TokenDescript.NUM)
         when {
             isSymbolIn(DIGITS) -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s8()
             }
             readedSymbol == '.' -> {
+                token.lexem.append(readedSymbol)
                 readSymbol()
                 s8_1()
             }
@@ -200,86 +242,112 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
     }
 
     private fun s8_1() {
-        setTokenAs(Constants.Token.NUM)
+        setTokenAs(Constants.TokenDescript.NUM)
         if (isSymbolIn(DIGITS)){
+            token.lexem.append(readedSymbol)
             readSymbol()
             s8_2()
         } else if (!isSymbolIn(DIGITS)){
             throw LexicalError(this, DIGITS)
+        }else{
+            setTokenAs(Constants.TokenDescript.NUM)
         }
     }
 
     private fun s8_2() {
-        setTokenAs(Constants.Token.NUM)
-        if (isSymbolIn(DIGITS)) {
-            readSymbol()
-            s8_2()
-        } else if(isSymbolIn(LETTERS)){
-            throw LexicalError(this, DIGITS)
+
+        when {
+            isSymbolIn(DIGITS) -> {
+                token.lexem.append(readedSymbol)
+                readSymbol()
+                s8_2()
+            }
+            isSymbolIn(LETTERS) -> throw LexicalError(this, DIGITS)
+            else -> {
+                setTokenAs(Constants.TokenDescript.NUM)
+            }
         }
     }
 
     private fun s9() {
-        setTokenAs(Constants.Token.RELATIONAL_OP)
+
         if (readedSymbol == '=') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s10()
+        }else{
+            setTokenAs(Constants.TokenDescript.RELATIONAL_OP)
         }
     }
 
     private fun s10() {
-        setTokenAs(Constants.Token.RELATIONAL_OP)
+        setTokenAs(Constants.TokenDescript.RELATIONAL_OP)
     }
 
     private fun s11() {
-        setTokenAs(Constants.Token.EQUAL)
+
         if (readedSymbol == '=') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s10()
+        }else{
+            setTokenAs(Constants.TokenDescript.EQUAL)
         }
     }
 
     private fun s12() {
-        setTokenAs(Constants.Token.VAR)
+
         if (readedSymbol == 'o') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s13()
-        } else s3()
+        } else {
+            setTokenAs(Constants.TokenDescript.VAR)
+            s3()
+        }
     }
 
     private fun s13() {
         if (isSymbolIn(LETTERS+DIGITS)) {
             readSymbol()
             s3()
-        } else setTokenAs(Constants.Token.DO)
+        } else {
+            setTokenAs(Constants.TokenDescript.DO)
+
+        }
     }
 
     private fun s14() {
-        setTokenAs(Constants.Token.VAR)
+        setTokenAs(Constants.TokenDescript.VAR)
         if (readedSymbol == 'h') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s15()
         } else s3()
     }
 
     private fun s15() {
-        setTokenAs(Constants.Token.VAR)
+        setTokenAs(Constants.TokenDescript.VAR)
         if (readedSymbol == 'i') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s16()
         } else s3()
     }
 
     private fun s16() {
-        setTokenAs(Constants.Token.VAR)
+        setTokenAs(Constants.TokenDescript.VAR)
         if (readedSymbol == 'l') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s17()
         } else s3()
     }
+
     private fun s17() {
-        setTokenAs(Constants.Token.VAR)
+        setTokenAs(Constants.TokenDescript.VAR)
         if (readedSymbol == 'e') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s18()
         } else s3()
@@ -287,21 +355,27 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
 
     private fun s18() {
         if (isSymbolIn(LETTERS+DIGITS)) {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s3()
-        } else setTokenAs(Constants.Token.WHILE)
+        } else{
+            setTokenAs(Constants.TokenDescript.WHILE)
+        }
     }
 
     private fun s19() {
-        setTokenAs(Constants.Token.NOT)
         if (readedSymbol == '=') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s10()
+        }else{
+            setTokenAs(Constants.TokenDescript.NOT)
         }
     }
 
     private fun s20() {
         if(readedSymbol == '&') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s22()
         } else throw LexicalError(this, "&")
@@ -309,17 +383,18 @@ class KotlinLexicalAnalyzer(inputFileName: String) : LexicalAnalyzer(inputFileNa
 
     private fun s21() {
         if(readedSymbol == '|') {
+            token.lexem.append(readedSymbol)
             readSymbol()
             s22()
         } else throw LexicalError(this, "|")
     }
 
     private fun s22() {
-        setTokenAs(Constants.Token.LOGIC_BIN_OP)
+        setTokenAs(Constants.TokenDescript.LOGIC_BIN_OP)
     }
 
-    private fun setTokenAs(token: Constants.Token) {
-        recognizedToken = token
+    private fun setTokenAs(descript: Constants.TokenDescript) {
+        token.descript = descript
     }
 
 }

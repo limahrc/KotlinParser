@@ -1,5 +1,10 @@
 do {
-    if(x > 5) {
-        camelCase = 5.6
+    if(x>5) {
+    mInHaNoTa = mInHaNoTa + 10.00
+        for (i in vec) {
+            i = i+1
+            p = u
+        }
+        x = x - 2
     }
 } while (x != 0)

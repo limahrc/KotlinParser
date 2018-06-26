@@ -9,15 +9,13 @@ open class LexicalAnalyzer(inputFileName: String) {
     var line = 1
     var collumn = 1
     var position = 0
-    lateinit var recognizedToken: Constants.Token
 
     init {
         try {
             input = File(inputFileName).readText()
             readSymbol()
         } catch (e: IOException) {
-            throw RuntimeException("Error while reading file " +
-                    inputFileName)
+            throw RuntimeException("Erro ao ler arquivo $inputFileName")
         }
     }
 

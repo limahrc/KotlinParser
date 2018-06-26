@@ -1,142 +1,223 @@
 package parser
+import Constants
 
 class KotlinSyntacticAnalyzer(inputFileName: String) : SyntacticAnalyzer(inputFileName) {
 
+    /**
+     * start -> command start | command
+     */
     fun begin() {
         command()
-        recognize(Constants.Token.EOF)
     }
 
+    /**
+     * command -> while
+        | doWhile
+        | for
+        | if
+        | lambda
+     * @author Herick Lima
+     */
     private fun command() {
         when {
-            readedTokenIs(Constants.Token.IF) -> {
+            readedTokenIs(Constants.TokenDescript.IF) -> {
                 println(currentToken())
                 readNextToken()
-                cmdIF()
+                cmdIf()
             }
-            readedTokenIs(Constants.Token.FOR) -> {
+            readedTokenIs(Constants.TokenDescript.FOR) -> {
                 println(currentToken())
                 readNextToken()
-                cmdFOR()
-                }
-            readedTokenIs(Constants.Token.DO) -> {
+                cmdFor()
+            }
+            readedTokenIs(Constants.TokenDescript.DO) -> {
                 println(currentToken())
                 readNextToken()
                 cmdDoWhile()
             }
-            readedTokenIs(Constants.Token.WHILE) -> {
+            readedTokenIs(Constants.TokenDescript.WHILE) -> {
                 println(currentToken())
                 readNextToken()
                 cmdWhile()
             }
-            readedTokenIs(Constants.Token.VAR) -> {
+            readedTokenIs(Constants.TokenDescript.VAR) -> {
                 readNextToken()
                 assignment()
             }
+            else -> lambda()
+        }
+
+    }
+
+    /**
+     * cmdList -> command cmdList | command
+     * @author Victor Cezari
+     */
+    private fun cmdList() {
+        val cmds = listOf(Constants.TokenDescript.WHILE, Constants.TokenDescript.IF,
+                Constants.TokenDescript.FOR, Constants.TokenDescript.DO)
+        //readNextToken()
+        if (cmds.contains(currentToken())) {
+            command()
+            cmdList()
+        } else {
+            command()
         }
     }
 
-    private fun block() {
-        recognize(Constants.Token.ACH)
-        command()
-        recognize(Constants.Token.FCH)
+    /**
+     * assignment -> <VAR> <EQUAL> exp
+     * @author Herick Lima
+     */
+    private fun assignment() {
+        recognize(Constants.TokenDescript.EQUAL)
+        exp()
     }
 
-    private fun cmdIF() {
-        recognize(Constants.Token.AP)
+    /**
+     * if -> <IF> <AP> exp <FP> block
+     * @author Herick Lima
+     */
+    private fun cmdIf() {
+        recognize(Constants.TokenDescript.AP)
         exp()
-        recognize(Constants.Token.FP)
+        recognize(Constants.TokenDescript.FP)
         block()
     }
 
-    private fun cmdFOR() {
-        recognize(Constants.Token.AP)
-        recognize(Constants.Token.VAR)
-        recognize(Constants.Token.IN)
-        exp()
-        recognize(Constants.Token.FP)
-        block()
-    }
-
+    /**
+     * doWhile -> <DO> block <WHILE> <AP> exp <FP>
+     * @author Herick Lima
+     */
     private fun cmdDoWhile() {
         block()
-        recognize(Constants.Token.WHILE)
-        recognize(Constants.Token.AP)
+        recognize(Constants.TokenDescript.WHILE)
+        recognize(Constants.TokenDescript.AP)
         exp()
-        recognize(Constants.Token.FP)
+        recognize(Constants.TokenDescript.FP)
     }
 
-    private fun cmdWhile() {
-        recognize(Constants.Token.AP)
+    /**
+     * for -> <FOR> <AP> <VAR> <IN> exp <FP> block
+     * @author Herick Lima
+     */
+    private fun cmdFor() {
+        recognize(Constants.TokenDescript.AP)
+        recognize(Constants.TokenDescript.VAR)
+        recognize(Constants.TokenDescript.IN)
         exp()
-        recognize(Constants.Token.FP)
+        recognize(Constants.TokenDescript.FP)
         block()
     }
 
-    private fun assignment() {
-        recognize(Constants.Token.EQUAL)
+    /**
+     * while -> <WHILE> <AP> exp <FP> block
+     * @author Herick Lima
+     */
+    private fun cmdWhile() {
+        recognize(Constants.TokenDescript.AP)
         exp()
+        recognize(Constants.TokenDescript.FP)
+        block()
     }
 
-    private fun exp() {
-        println(currentToken())
+    /**
+     * block -> <ACH> cmdList <FCH>
+     * @author Herick Lima
+     */
+    private fun block() {
+        recognize(Constants.TokenDescript.ACH)
+        cmdList()
+        cmdList()
+        recognize(Constants.TokenDescript.FCH)
+    }
+
+    /**
+     * number -> <OP-ARIT-SIGNAL> <NUM> | <NUM>
+     * @author Herick Lima
+     */
+    private fun number() {
+        if (readedTokenIs(Constants.TokenDescript.OP_ARIT_SIGNAL)) {
+            readNextToken()
+        }
+        recognize(Constants.TokenDescript.NUM)
+    }
+
+    /**
+     * operator -> <OP-ARIT-SIGNAL>
+        | <OP-ARIT>
+        | <LOGIC-BIN-OP>
+        | <RELATIONAL-OP>
+     * @author Victor Cezari
+     */
+    private fun operator() {
         when {
-            readedTokenIs(Constants.Token.AP) -> { // exp -> AP exp FP
+            readedTokenIs(Constants.TokenDescript.OP_ARIT_SIGNAL) -> {
+                recognize(Constants.TokenDescript.OP_ARIT_SIGNAL)
+            }
+            readedTokenIs(Constants.TokenDescript.OP_ARIT) -> {
+                recognize(Constants.TokenDescript.OP_ARIT)
+            }
+            readedTokenIs(Constants.TokenDescript.LOGIC_BIN_OP) -> {
+                recognize(Constants.TokenDescript.LOGIC_BIN_OP)
+            }
+            readedTokenIs(Constants.TokenDescript.RELATIONAL_OP) -> {
+                recognize(Constants.TokenDescript.RELATIONAL_OP)
+            }
+            else -> throw SyntaxError(this, Constants.ARITH_OPS+Constants.LOGICS+
+                    Constants.DIFFERENT+Constants.RELATIONALS+Constants.SIGNALS )
+        }
+    }
+
+    /**
+     * exp -> <AP> exp <FP>
+        | number expB
+        | <VAR> expB
+        | <NOT> exp
+     * @author Herick Lima
+     */
+    private fun exp() {
+        when {
+            readedTokenIs(Constants.TokenDescript.AP) -> {
                 readNextToken()
                 exp()
-                recognize(Constants.Token.FP)
+                recognize(Constants.TokenDescript.FP)
             }
-            readedTokenIs(Constants.Token.VAR) -> { // exp -> VAR expB
+            readedTokenIs(Constants.TokenDescript.VAR) -> {
+                println(currentToken())
                 readNextToken()
                 expB()
             }
-            readedTokenIs(Constants.Token.NOT) -> { // exp -> NOT expB
+            readedTokenIs(Constants.TokenDescript.NOT) -> {
                 readNextToken()
                 exp()
             }
-            readedTokenIs(Constants.Token.OP_ARIT_SIGNAL) || readedTokenIs(Constants.Token.NUM) -> {
+            readedTokenIs(Constants.TokenDescript.OP_ARIT_SIGNAL) || readedTokenIs(Constants.TokenDescript.NUM) -> {
                 number()
                 expB()
             }
         }
     }
 
-    private fun expB() {
-        val notAllowed = listOf(
-                Constants.Token.FP,
-                Constants.Token.FCH,
-                Constants.Token.EOF
+    /**
+     * expB-> operator exp expB| lambda
+     * @author Victor Cezari
+     */
+    private fun expB(){
+        val ops = listOf (
+                Constants.TokenDescript.OP_ARIT,
+                Constants.TokenDescript.OP_ARIT_SIGNAL,
+                Constants.TokenDescript.LOGIC_BIN_OP,
+                Constants.TokenDescript.RELATIONAL_OP
         )
-        if (!notAllowed.contains(currentToken())) {
+        if (!ops.contains(currentToken()) || scanner.readedSymbol == '\n') {
+            lambda()
+        } else {
             operator()
             exp()
-        } else {
-            lambda()
+            expB()
         }
-    }
 
-    private fun number() {
-        if (readedTokenIs(Constants.Token.OP_ARIT_SIGNAL)) {
-            readNextToken()
-        }
-        recognize(Constants.Token.NUM)
-    }
-
-    private fun operator() {
-        val ops = listOf (
-                Constants.Token.OP_ARIT,
-                Constants.Token.OP_ARIT_SIGNAL,
-                Constants.Token.LOGIC_BIN_OP,
-                Constants.Token.RELATIONAL_OP
-        )
-        if (!ops.contains(currentToken())) {
-            val expected = mutableListOf<Constants.Token>()
-            expected.addAll(ops)
-            throw SyntaxError(this, expected)
-        } else {
-            println(currentToken())
-            readNextToken()
-        }
     }
 }
 
